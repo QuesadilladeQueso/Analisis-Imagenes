@@ -16,6 +16,7 @@ st.image(original, use_column_width=True)
 image = cv2.imread('Imagen3.jpg',0)
 st.map(plt.hist(image.ravel(), 256,[0,256]))
 
+print("Huevos Pepitas y cacahuates")
 
 
 
