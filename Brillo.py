@@ -7,17 +7,28 @@ from matplotlib import pyplot as plt
 # Ajuste de brillo y contraste
 #Beta corresponde a 
 #Lectura de Imagen
-parser = argparse.ArgumentParser(description='Code for Changing the contrast and brightness of an image! tutorial.')
-parser.add_argument('--input', help='Direccion de la imagen.', default='Imagen3.jpg')
-args = parser.parse_args()
-image = cv.imread(cv.samples.findFile(args.input))
+
+# parser = argparse.ArgumentParser(description='Code for Changing the contrast and brightness of an image! tutorial.')
+# parser.add_argument('--input', help='Direccion de la imagen.', default='Imagen3.jpg')
+# args = parser.parse_args()
+
+print('''
+      -------------------------------------------------------------
+        Código para cambiar el contraste y el brilo de una imagen
+      -------------------------------------------------------------
+      ''')
+
+filename = input('Ingresa el nombre de la imagen')
+
+image = cv.imread(filename)
 if image is None:
-    print('Error en la imagen ', args.input)
+    print('Error en la imagen ', filename)
     exit(0)
 #Lectura de Imagen
 new_image = np.zeros(image.shape, image.dtype)
 alpha = 1.0 # Contraste
 beta = 0    # Brillo 
+
 # Terminal
 print(' Basic Linear Transforms ')
 print('-------------------------')
