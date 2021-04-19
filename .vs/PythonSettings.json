@@ -1,3 +1,7 @@
 {
+<<<<<<< HEAD
   "Interpreter": "Global|ContinuumAnalytics|Anaconda38-64"
+=======
+  "Interpreter": "Global|ContinuumAnalytics|Anaconda39-64"
+>>>>>>> 755c87bf06c506c981ec1217238942241a07d216
 }
