@@ -1,11 +1,14 @@
 from tkinter import *
+from tkinter import simpledialog
 from PIL import Image
 from PIL import ImageTk
 from tkinter import filedialog
 import cv2
 import imutils
 import numpy as np
+import tkinter as tk
 from matplotlib import pyplot as plt
+
 
 #---------Selección de Imagen-----------------------------------------------------------------------------------------------------
 def Seleccion_Imagen():
@@ -144,25 +147,38 @@ def Desplazamiento():
     alpha = 1.0 # Contraste
     beta = 0    # Brillo 
     # Terminal
+    application_window = tk.Tk()
+    
     try:
-        beta = int(input('* Ingrese cambio del brillo [0-100]: '))
+       beta = simpledialog.askstring("Dezplazamiento", "Ingrese cambio del brillo [0-100]", parent=application_window)
     except ValueError:
         print('Ingrese numero')
     #Terminal
-    for y in range(image.shape[0]):
-        for x in range(image.shape[1]):
-            for c in range(image.shape[2]):
-                new_image[y,x,c] = np.clip(alpha*image[y,x,c] + beta, 0, 255)
+    #for y in range(image.shape[0]):
+     #   for x in range(image.shape[1]):
+      #      for c in range(image.shape[2]):
+       #         new_image[y,x,c] = np.clip(alpha*image[y,x,c] + beta, 0, 255)
+
+    im2 = imutils.resize(new_image.astype(np.uint8), height=400)
+    
+    img = Image.fromarray((im2).astype(np.uint8))
+    img_tk = ImageTk.PhotoImage(image=img)
+    labelImagenSalida.configure(image=img_tk)
+    labelImagenSalida.image = img_tk
+
+    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
+
     #Muestra de imagenes
-    cv2.imshow('Original Image', image)
-    img = cv2.imread('Imagen3.jpg',0)
-    plt.hist(img.ravel(),256,[0,256]); plt.show()
+    ##cv2.imshow('Original Image', image)
+    ##img = cv2.imread('Imagen3.jpg',0)
+    ##plt.hist(img.ravel(),256,[0,256]); plt.show()
     #Primer imagen con histograma fin
-    cv2.waitKey()
-    cv2.imshow('New Image', new_image)
-    plt.hist(new_image.ravel(),256,[0,256]); plt.show()
+    ##cv2.waitKey()
+    ##cv2.imshow('New Image', new_image)
+    ##plt.hist(new_image.ravel(),256,[0,256]); plt.show()
     # Wait until user press some key
-    cv2.waitKey()
+    ##cv2.waitKey()
 
 # #---------Contracción--------------------------------------------------------------------------------------------------------------
 # ruta = filedialog.askopenfilename(filetypes= [
@@ -206,6 +222,8 @@ if __name__ == '__main__':
     ruta = None
     
     raiz = Tk()
+    
+
     raiz.title("Practica 1: Ajuste de Brillo")
     raiz.geometry("1000x720")
     raiz['bg'] = '#7090c4' 
@@ -219,7 +237,7 @@ if __name__ == '__main__':
     labelOpcion.grid(column = 0, row = 3, padx = 5, pady = 5)
     
     seleccionado = IntVar()
-    rad1 = Radiobutton(raiz, text='Desplazamineto', bg="#7090c4", fg="#ffffff", width=35, font=("Courier", 21),value=1, variable=seleccionado)
+    rad1 = Radiobutton(raiz, text='Desplazamineto', bg="#7090c4", fg="#ffffff", width=35, font=("Courier", 21),value=1, variable=seleccionado, command=Desplazamiento)
     rad2 = Radiobutton(raiz, text='Expansión', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=2, variable=seleccionado, command=EST)
     rad3 = Radiobutton(raiz, text='Contracción', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado)
     rad4 = Radiobutton(raiz, text='Ecualización Logarimo Hiperbolica', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=4, variable=seleccionado, command=EQNYH)
