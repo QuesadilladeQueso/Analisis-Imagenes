@@ -37,9 +37,9 @@ for i in matriz:
 
              
 
-plt.imsave('filename.png', np.array(M_matriz).reshape(212,148), cmap=cm.gray)
+plt.imsave('filename.png', np.array([M_matriz]), cmap=cm.gray)
 print("despues del cambio")
-Image. open('filename.png')
+
 # # print('-----------------')
 
 # hist2 = cv2.calcHist([image], [0], None, [256], [0,256])
