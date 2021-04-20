@@ -12,25 +12,31 @@ image = cv2.imread('Imagen3.jpg', 0)
 
 hist = cv2.calcHist([image], [0], None, [256], [0, 256])
 
-hi = hist.cumsum()
-hi_norm = hi*255/hi[-1]
+probas = []
+for i in range(len(hist)):
+    probas.append(hist[i,0]/31376)
+
 matriz_bruta = image.reshape(1,31376)
 matriz = matriz_bruta[0]
 
 M_matriz = []
-# M_matriz = matriz.reshape(1,31376)
-r_max = np.amax(matriz)
-r_min = np.amin(matriz)
 
+r_max = 255
+r_min = 20
+
+def acumulada(i):
+    sum = 0
+    for index in range(i):
+        sum = sum + probas[index]
+    return sum
 
 for i in matriz:     
-    # d = acumulada(aux)
-    operacion = (r_max/r_min)*hi_norm[i]
-    a = i - round(operacion)
+    d = acumulada(i)  
+    operacion = (r_max/r_min) * d
+    a = r_min * round(operacion)
     #print(a)
     M_matriz.append(a)
     
-
 
 nueva_matriz = np.array([M_matriz]).reshape(148,212)
 
