@@ -6,6 +6,7 @@ import cv2
 import imutils
 import numpy as np
 
+
 image = None
 
 def Seleccion_Imagen():
