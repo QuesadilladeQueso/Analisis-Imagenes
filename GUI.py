@@ -7,8 +7,6 @@ import imutils
 import numpy as np
 
 
-image = None
-
 def Seleccion_Imagen():
     
     
@@ -36,9 +34,61 @@ def Seleccion_Imagen():
 
         labelImagenSalida.image = ""
         seleccionado.set(0)
-        
+
+
+def acumulada(i,probas):
+    sum = 0
+    for index in range(i):
+        sum = sum + probas[index]
+    return sum        
+
+def EQNYH():
+    
+    ruta = filedialog.askopenfilename(filetypes= [
+        ("image", ".jpeg"),
+        ("image", ".png"),
+        ("image", ".jpg")])
+   
+    image = cv2.imread(ruta, 0)
+
+    
+    hist = cv2.calcHist([image], [0], None, [256], [0, 256])
+    probas = []
+    for i in range(len(hist)):
+        probas.append(hist[i,0]/31376)
+
+    matriz_bruta = image.reshape(1,31376)
+    matriz = matriz_bruta[0]
+
+    M_matriz = []
+
+    r_max = 255
+    r_min = 20
+    for i in matriz:     
+        d = acumulada(i, probas)  
+        operacion = (r_max/r_min) * d
+        a = r_min * round(operacion)
+        M_matriz.append(a)
+    
+    
+    nueva_matriz = np.array([M_matriz]).reshape(148,212)
+    
+    nueva_matriz = imutils.resize(nueva_matriz.astype(np.uint8), height=400)
+    
+    img = Image.fromarray((nueva_matriz).astype(np.uint8))
+    img_tk = ImageTk.PhotoImage(image=img)
+    labelImagenSalida.configure(image=img_tk)
+    labelImagenSalida.image = img_tk
+
+    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
+
+
 
 if __name__ == '__main__':
+    
+    image = None
+    ruta = None
     
     raiz = Tk()
     raiz.title("Practica 1: Ajuste de Brillo")
@@ -57,7 +107,7 @@ if __name__ == '__main__':
     rad1 = Radiobutton(raiz, text='Desplazamineto', bg="#7090c4", fg="#ffffff", width=35, font=("Courier", 21),value=1, variable=seleccionado)
     rad2 = Radiobutton(raiz, text='Expansión', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=2, variable=seleccionado)
     rad3 = Radiobutton(raiz, text='Contracción', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado)
-    rad4 = Radiobutton(raiz, text='Ecualización Logarimo Hiperbolica', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=4, variable=seleccionado)
+    rad4 = Radiobutton(raiz, text='Ecualización Logarimo Hiperbolica', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=4, variable=seleccionado, command=EQNYH)
     rad1.grid(column=0, row=4, padx = 10, pady = 10)
     rad2.grid(column=0, row=5, padx = 10, pady = 10)
     rad3.grid(column=0, row=6, padx = 10, pady = 10)
