@@ -141,25 +141,31 @@ def Desplazamiento():
             ("image", ".jpg")])
 
     image = cv2.imread(ruta, 0) 
-
-    #Lectura de Imagen
-    new_image = np.zeros(image.shape, image.dtype)
+    matriz_bruta = image.reshape(1,31376)
+    matriz = matriz_bruta[0]
+    
+    new_image = []
+     
     alpha = 1.0 # Contraste
     beta = 0    # Brillo 
     # Terminal
     application_window = tk.Tk()
+    beta = simpledialog.askstring("Dezplazamiento", "Ingrese cambio del brillo [0-100]", parent=application_window)
+    beta = int(beta)
     
-    try:
-       beta = simpledialog.askstring("Dezplazamiento", "Ingrese cambio del brillo [0-100]", parent=application_window)
-    except ValueError:
-        print('Ingrese numero')
+    for pixel in matriz:
+        operacion = (alpha*pixel) + beta
+        new_image.append(operacion)
+        
+    nueva_matriz = np.array([new_image]).reshape(148,212)
+    
     #Terminal
     #for y in range(image.shape[0]):
      #   for x in range(image.shape[1]):
       #      for c in range(image.shape[2]):
        #         new_image[y,x,c] = np.clip(alpha*image[y,x,c] + beta, 0, 255)
 
-    im2 = imutils.resize(new_image.astype(np.uint8), height=400)
+    im2 = imutils.resize(nueva_matriz.astype(np.uint8), height=400)
     
     img = Image.fromarray((im2).astype(np.uint8))
     img_tk = ImageTk.PhotoImage(image=img)
@@ -181,39 +187,43 @@ def Desplazamiento():
     ##cv2.waitKey()
 
 # #---------Contracción--------------------------------------------------------------------------------------------------------------
-# ruta = filedialog.askopenfilename(filetypes= [
-#         ("image", ".jpeg"),
-#         ("image", ".png"),
-#         ("image", ".jpg")])
-# image = cv2.imread(ruta, 0) 
 
-# if image is None:
-#     print('Error en la imagen ', filename)
-#     exit(0)
-# #Lectura de Imagen
-# new_image = np.zeros(image.shape, image.dtype)
-# alpha = 1.0 # Contraste
-# beta = 0    # Brillo 
-# # Terminal
-# try:
-#     alpha = float(input('* Ingrese ganancia (contraste) [1.0-3.0]: '))
-# except ValueError:
-#     print('Ingrese numero')
-# #Terminal
-# for y in range(image.shape[0]):
-#     for x in range(image.shape[1]):
-#         for c in range(image.shape[2]):
-#             new_image[y,x,c] = np.clip(alpha*image[y,x,c] + beta, 0, 255)
-# #Muestra de imagenes
-# cv.imshow('Original Image', image)
-# img = cv.imread('Imagen3.jpg',0)
-# plt.hist(img.ravel(),256,[0,256]); plt.show()
-# #Primer imagen con histograma fin
-# cv.waitKey()
-# cv.imshow('New Image', new_image)
-# plt.hist(new_image.ravel(),256,[0,256]); plt.show()
-# # Wait until user press some key
-# cv.waitKey()
+def Contraccion():
+    
+    ruta = filedialog.askopenfilename(filetypes= [
+            ("image", ".jpeg"),
+            ("image", ".png"),
+            ("image", ".jpg")])
+
+    image = cv2.imread(ruta, 0) 
+    matriz_bruta = image.reshape(1,31376)
+    matriz = matriz_bruta[0]
+    
+    new_image = []
+     
+    alpha = 1.0 # Contraste
+    beta = 0    # Brillo 
+    # Terminal
+    application_window = tk.Tk()
+    alpha = simpledialog.askstring("Estrechamiento", "Ingrese cambio [0-100]", parent=application_window)
+    alpha = int(alpha)
+    
+    for pixel in matriz:
+        operacion = (alpha*pixel) + beta
+        new_image.append(operacion)
+        
+    nueva_matriz = np.array([new_image]).reshape(148,212)
+    
+    im2 = imutils.resize(nueva_matriz.astype(np.uint8), height=400)
+    
+    img = Image.fromarray((im2).astype(np.uint8))
+    img_tk = ImageTk.PhotoImage(image=img)
+    labelImagenSalida.configure(image=img_tk)
+    labelImagenSalida.image = img_tk
+
+    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
+        
 
 #---------Main-----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
@@ -239,7 +249,7 @@ if __name__ == '__main__':
     seleccionado = IntVar()
     rad1 = Radiobutton(raiz, text='Desplazamineto', bg="#7090c4", fg="#ffffff", width=35, font=("Courier", 21),value=1, variable=seleccionado, command=Desplazamiento)
     rad2 = Radiobutton(raiz, text='Expansión', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=2, variable=seleccionado, command=EST)
-    rad3 = Radiobutton(raiz, text='Contracción', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado)
+    rad3 = Radiobutton(raiz, text='Contracción', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Contraccion)
     rad4 = Radiobutton(raiz, text='Ecualización Logarimo Hiperbolica', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=4, variable=seleccionado, command=EQNYH)
     rad1.grid(column=0, row=4, padx = 10, pady = 10)
     rad2.grid(column=0, row=5, padx = 10, pady = 10)
