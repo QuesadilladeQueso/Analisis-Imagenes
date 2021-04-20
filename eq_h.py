@@ -14,28 +14,22 @@ hist = cv2.calcHist([image], [0], None, [256], [0, 256])
 
 hi = hist.cumsum()
 hi_norm = hi*255/hi[-1]
-# print(hist)
 matriz_bruta = image.reshape(1,31376)
 matriz = matriz_bruta[0]
 
 M_matriz = []
 # M_matriz = matriz.reshape(1,31376)
-c = 0
-d = 0
-r_max = 200
-r_min = 10
-
-aux = 0
-
+r_max = np.amax(matriz)
+r_min = np.amin(matriz)
 
 
 for i in matriz:     
     # d = acumulada(aux)
-    print(i)
     operacion = (r_max/r_min)*hi_norm[i]
     a = i - round(operacion)
+    #print(a)
     M_matriz.append(a)
-    aux = aux + 1
+    
 
 
 nueva_matriz = np.array([M_matriz]).reshape(148,212)
