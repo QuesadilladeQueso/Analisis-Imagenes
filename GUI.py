@@ -86,102 +86,118 @@ def EQNYH():
 
 #---------Estrechamiento/Expansión-------------------------------------------------------------------------------------------------
 def EST ():
+    
     ruta = filedialog.askopenfilename(filetypes= [
         ("image", ".jpeg"),
         ("image", ".png"),
         ("image", ".jpg")])
+    
     img = cv2.imread(ruta, 0) #abre la imagen
     hist,bins = np.histogram(img.flatten(),256,[0,256]) #saca el histograma
     cdf = hist.cumsum() #se hace el filtro del histograma
     cdf_normalized = cdf * hist.max()/ cdf.max() #se normaliza
-    plt.plot(cdf_normalized, color = 'b')
-    plt.hist(img.flatten(),256,[0,256], color = 'r')                #Para mostrar el primer histograma
-    plt.xlim([0,256])
-    plt.legend(('cdf','histogram'), loc = 'upper left')
-    plt.show()
+    
+    # plt.plot(cdf_normalized, color = 'b')
+    # plt.hist(img.flatten(),256,[0,256], color = 'r')                #Para mostrar el primer histograma
+    # plt.xlim([0,256])
+    # plt.legend(('cdf','histogram'), loc = 'upper left')
+    # plt.show()
+    
     cdf_m = np.ma.masked_equal(cdf,0)
     cdf_m = (cdf_m - cdf_m.min())*255/(cdf_m.max()-cdf_m.min())     #Aplicación del filtro
     cdf = np.ma.filled(cdf_m,0).astype('uint8')
     img2 = cdf[img]
-    img = cv2.imread('imagen3.jpg',0)                               #Lectura y creación de la nueva imagen e histograma con el filtro
-    equ = cv2.equalizeHist(img)
-    res = np.hstack((img,equ)) #stacking images side-by-side
-    cv2.imwrite('res.png',res)                                      #Guardado de la nueva imagen con la comparativa entre imagenes
-    plt.plot(cdf_normalized, color = 'b')
-    plt.hist(res.flatten(),256,[0,256], color = 'r')
-    plt.xlim([0,256])
-    plt.legend(('cdf','histogram'), loc = 'upper left')
-    plt.show()
+    
+    im2 = imutils.resize(img2.astype(np.uint8), height=400)
+    
+    img = Image.fromarray((im2).astype(np.uint8))
+    img_tk = ImageTk.PhotoImage(image=img)
+    labelImagenSalida.configure(image=img_tk)
+    labelImagenSalida.image = img_tk
+
+    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
+
+    
+    # img = cv2.imread('imagen3.jpg',0)                               #Lectura y creación de la nueva imagen e histograma con el filtro
+    # equ = cv2.equalizeHist(img)
+    # res = np.hstack((img,equ)) #stacking images side-by-side
+    # cv2.imwrite('res.png',res)                                      #Guardado de la nueva imagen con la comparativa entre imagenes
+    # plt.plot(cdf_normalized, color = 'b')
+    # plt.hist(res.flatten(),256,[0,256], color = 'r')
+    # plt.xlim([0,256])
+    # plt.legend(('cdf','histogram'), loc = 'upper left')
+    # plt.show()
     
 #---------Brillo/Desplazamiento----------------------------------------------------------------------------------------------------
-ruta = filedialog.askopenfilename(filetypes= [
-        ("image", ".jpeg"),
-        ("image", ".png"),
-        ("image", ".jpg")])
-    imge = cv2.imread(ruta, 0) 
+def Desplazamiento():
+    
+    ruta = filedialog.askopenfilename(filetypes= [
+            ("image", ".jpeg"),
+            ("image", ".png"),
+            ("image", ".jpg")])
 
-if image is None:
-    print('Error en la imagen ', filename)
-    exit(0)
-#Lectura de Imagen
-new_image = np.zeros(image.shape, image.dtype)
-alpha = 1.0 # Contraste
-beta = 0    # Brillo 
-# Terminal
-try:
-    beta = int(input('* Ingrese cambio del brillo [0-100]: '))
-except ValueError:
-    print('Ingrese numero')
-#Terminal
-for y in range(image.shape[0]):
-    for x in range(image.shape[1]):
-        for c in range(image.shape[2]):
-            new_image[y,x,c] = np.clip(alpha*image[y,x,c] + beta, 0, 255)
-#Muestra de imagenes
-cv.imshow('Original Image', image)
-img = cv.imread('Imagen3.jpg',0)
-plt.hist(img.ravel(),256,[0,256]); plt.show()
-#Primer imagen con histograma fin
-cv.waitKey()
-cv.imshow('New Image', new_image)
-plt.hist(new_image.ravel(),256,[0,256]); plt.show()
-# Wait until user press some key
-cv.waitKey()
+    image = cv2.imread(ruta, 0) 
 
-#---------Contracción--------------------------------------------------------------------------------------------------------------
-ruta = filedialog.askopenfilename(filetypes= [
-        ("image", ".jpeg"),
-        ("image", ".png"),
-        ("image", ".jpg")])
-    imge = cv2.imread(ruta, 0) 
+    #Lectura de Imagen
+    new_image = np.zeros(image.shape, image.dtype)
+    alpha = 1.0 # Contraste
+    beta = 0    # Brillo 
+    # Terminal
+    try:
+        beta = int(input('* Ingrese cambio del brillo [0-100]: '))
+    except ValueError:
+        print('Ingrese numero')
+    #Terminal
+    for y in range(image.shape[0]):
+        for x in range(image.shape[1]):
+            for c in range(image.shape[2]):
+                new_image[y,x,c] = np.clip(alpha*image[y,x,c] + beta, 0, 255)
+    #Muestra de imagenes
+    cv2.imshow('Original Image', image)
+    img = cv2.imread('Imagen3.jpg',0)
+    plt.hist(img.ravel(),256,[0,256]); plt.show()
+    #Primer imagen con histograma fin
+    cv2.waitKey()
+    cv2.imshow('New Image', new_image)
+    plt.hist(new_image.ravel(),256,[0,256]); plt.show()
+    # Wait until user press some key
+    cv2.waitKey()
 
-if image is None:
-    print('Error en la imagen ', filename)
-    exit(0)
-#Lectura de Imagen
-new_image = np.zeros(image.shape, image.dtype)
-alpha = 1.0 # Contraste
-beta = 0    # Brillo 
-# Terminal
-try:
-    alpha = float(input('* Ingrese ganancia (contraste) [1.0-3.0]: '))
-except ValueError:
-    print('Ingrese numero')
-#Terminal
-for y in range(image.shape[0]):
-    for x in range(image.shape[1]):
-        for c in range(image.shape[2]):
-            new_image[y,x,c] = np.clip(alpha*image[y,x,c] + beta, 0, 255)
-#Muestra de imagenes
-cv.imshow('Original Image', image)
-img = cv.imread('Imagen3.jpg',0)
-plt.hist(img.ravel(),256,[0,256]); plt.show()
-#Primer imagen con histograma fin
-cv.waitKey()
-cv.imshow('New Image', new_image)
-plt.hist(new_image.ravel(),256,[0,256]); plt.show()
-# Wait until user press some key
-cv.waitKey()
+# #---------Contracción--------------------------------------------------------------------------------------------------------------
+# ruta = filedialog.askopenfilename(filetypes= [
+#         ("image", ".jpeg"),
+#         ("image", ".png"),
+#         ("image", ".jpg")])
+# image = cv2.imread(ruta, 0) 
+
+# if image is None:
+#     print('Error en la imagen ', filename)
+#     exit(0)
+# #Lectura de Imagen
+# new_image = np.zeros(image.shape, image.dtype)
+# alpha = 1.0 # Contraste
+# beta = 0    # Brillo 
+# # Terminal
+# try:
+#     alpha = float(input('* Ingrese ganancia (contraste) [1.0-3.0]: '))
+# except ValueError:
+#     print('Ingrese numero')
+# #Terminal
+# for y in range(image.shape[0]):
+#     for x in range(image.shape[1]):
+#         for c in range(image.shape[2]):
+#             new_image[y,x,c] = np.clip(alpha*image[y,x,c] + beta, 0, 255)
+# #Muestra de imagenes
+# cv.imshow('Original Image', image)
+# img = cv.imread('Imagen3.jpg',0)
+# plt.hist(img.ravel(),256,[0,256]); plt.show()
+# #Primer imagen con histograma fin
+# cv.waitKey()
+# cv.imshow('New Image', new_image)
+# plt.hist(new_image.ravel(),256,[0,256]); plt.show()
+# # Wait until user press some key
+# cv.waitKey()
 
 #---------Main-----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
