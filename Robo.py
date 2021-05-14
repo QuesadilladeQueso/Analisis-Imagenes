@@ -61,7 +61,11 @@ def SalPimienta(nombre, prob):
     print ("Abrir la imagen tardo: ", tiempo_de_terminacion - tiempo_de_inicio, " segundos")
 
 
-def noise(img, salt, pepper):
+def noise(img):
+     
+    salt = random.randint(0,1)
+    pepper = random.randint(0,1)
+    
     height=img.shape[0]
     width=img.shape[1]  
     img_r=np.asarray(img.copy(),order="C")

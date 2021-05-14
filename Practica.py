@@ -7,6 +7,7 @@ import cv2
 import imutils
 import numpy as np
 import tkinter as tk
+import random
 from matplotlib import pyplot as plt
 
 
@@ -225,6 +226,45 @@ def Contraccion():
     lblInfo3.grid(column=1, row=0, padx=5, pady=5)
         
 
+def SalPimienta():
+    
+    ruta = filedialog.askopenfilename(filetypes= [
+            ("image", ".jpeg"),
+            ("image", ".png"),
+            ("image", ".jpg")])
+
+    image = cv2.imread(ruta, 0) 
+    matriz_bruta = image.reshape(1,31376)
+    matriz = matriz_bruta[0]
+    
+    new_image = []
+    
+    application_window = tk.Tk()
+    prob = float(simpledialog.askstring("Ruido SalPimienta", "Ingrese cambio [0-0.1]", parent=application_window))
+    thresh = 1 - prob
+    
+    for pixel in matriz:
+        rdn = random.random()
+        if rdn < prob:
+            new_image.append(0)
+        elif rdn > thresh:
+             new_image.append(255)
+        else:
+            new_image.append(pixel)
+    
+    nueva_matriz = np.array([new_image]).reshape(148,212)
+    
+    im2 = imutils.resize(nueva_matriz.astype(np.uint8), height=400)
+    
+    img = Image.fromarray((im2).astype(np.uint8))
+    img_tk = ImageTk.PhotoImage(image=img)
+    labelImagenSalida.configure(image=img_tk)
+    labelImagenSalida.image = img_tk
+
+    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
+
+
 #---------Main-----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     
@@ -251,10 +291,12 @@ if __name__ == '__main__':
     rad2 = Radiobutton(raiz, text='Expansión', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=2, variable=seleccionado, command=EST)
     rad3 = Radiobutton(raiz, text='Contracción', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Contraccion)
     rad4 = Radiobutton(raiz, text='Ecualización Logarimo Hiperbolica', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=4, variable=seleccionado, command=EQNYH)
+    rad5 = Radiobutton(raiz, text='Ruido SalPimienta', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=5, variable=seleccionado, command=SalPimienta)
     rad1.grid(column=0, row=4, padx = 10, pady = 10)
     rad2.grid(column=0, row=5, padx = 10, pady = 10)
     rad3.grid(column=0, row=6, padx = 10, pady = 10)
     rad4.grid(column=0, row=7, padx = 10, pady = 10)
+    rad5.grid(column=0, row=8, padx = 10, pady = 10)
     
     
     btn = Button(raiz, text="Selecciona una imagen", width=40, command=Seleccion_Imagen)
