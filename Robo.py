@@ -60,6 +60,26 @@ def SalPimienta(nombre, prob):
     tiempo_de_terminacion = time.time()
     print ("Abrir la imagen tardo: ", tiempo_de_terminacion - tiempo_de_inicio, " segundos")
 
+
+def noise(img, salt, pepper):
+    height=img.shape[0]
+    width=img.shape[1]  
+    img_r=np.asarray(img.copy(),order="C")
+    hw=height*width
+    if salt>0 and salt<=1:
+        npixels=int(float(hw)*salt)
+        for i in range(npixels):
+            x = np.random.randint(0,width,1)
+            y = np.random.randint(0,height,1)
+            img_r[y[0],x[0]]=255
+    if pepper>0 and pepper<=1:
+        npixels=int(float(hw)*pepper)
+        for i in range(npixels):
+            x = np.random.randint(0,width,1)
+            y = np.random.randint(0,height,1)
+            img_r[y[0],x[0]]=0
+    return img_r
+
 def Promedio(nombre):
     tiempo_de_inicio = time.time()
     im = cv2.imread(nombre)
