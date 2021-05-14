@@ -264,6 +264,59 @@ def SalPimienta():
     lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
     lblInfo3.grid(column=1, row=0, padx=5, pady=5)
 
+#---------Promediador-----------------------------------------------------------------------------------------------------        
+def Promedio():
+    ruta = filedialog.askopenfilename(filetypes= [
+            ("image", ".jpeg"),
+            ("image", ".png"),
+            ("image", ".jpg")])
+
+    im = cv2.imread(ruta, 0) 
+        
+    a = [ [ 1.0/9, 1.0/9, 1.0/9 ],
+          [ 1.0/9, 1.0/9, 1.0/9 ],
+          [ 1.0/9, 1.0/9, 1.0/9 ] ]
+    kernel = np.asarray(a)
+    dst = cv2.filter2D(im, -1, kernel)
+    cv2.imwrite ('Promedio.jpg', dst)
+   
+    img = Image.fromarray((dst).astype(np.uint8))
+    img_tk = ImageTk.PhotoImage(image=img)
+    labelImagenSalida.configure(image=img_tk)
+    labelImagenSalida.image = img_tk
+
+    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
+     
+
+
+#---------Promediado pesado-----------------------------------------------------------------------------------------------------     
+def PromedioPesado():
+    
+    ruta = filedialog.askopenfilename(filetypes= [
+            ("image", ".jpeg"),
+            ("image", ".png"),
+            ("image", ".jpg")])
+    
+    val = random.randint(0,1)
+    im = cv2.imread(ruta, 0) 
+    
+    aux = val + 8
+    a = [ [ 1.0/aux, 1.0/aux, 1.0/aux ],
+          [ 1.0/aux,  val   , 1.0/aux ],
+          [ 1.0/aux, 1.0/aux, 1.0/aux ] ]
+    kernel = np.asarray(a)
+    dst = cv2.filter2D(im, -1, kernel)
+    cv2.imwrite ('PromedioPesado.jpg', dst)
+    
+    img = Image.fromarray((dst).astype(np.uint8))
+    img_tk = ImageTk.PhotoImage(image=img)
+    labelImagenSalida.configure(image=img_tk)
+    labelImagenSalida.image = img_tk
+
+    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
+
 
 #---------Main-----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
@@ -292,16 +345,20 @@ if __name__ == '__main__':
     rad3 = Radiobutton(raiz, text='Contracción', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Contraccion)
     rad4 = Radiobutton(raiz, text='Ecualización Logarimo Hiperbolica', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=4, variable=seleccionado, command=EQNYH)
     rad5 = Radiobutton(raiz, text='Ruido SalPimienta', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=5, variable=seleccionado, command=SalPimienta)
+    rad6 = Radiobutton(raiz, text='Promediador', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=5, variable=seleccionado, command=Promedio)
+    rad7 = Radiobutton(raiz, text='Promedio Pesado', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=5, variable=seleccionado, command=PromedioPesado)
     rad1.grid(column=0, row=4, padx = 10, pady = 10)
     rad2.grid(column=0, row=5, padx = 10, pady = 10)
     rad3.grid(column=0, row=6, padx = 10, pady = 10)
     rad4.grid(column=0, row=7, padx = 10, pady = 10)
     rad5.grid(column=0, row=8, padx = 10, pady = 10)
+    rad6.grid(column=0, row=9, padx = 10, pady = 10)
+    rad7.grid(column=0, row=10, padx = 10, pady = 10)
     
     
     btn = Button(raiz, text="Selecciona una imagen", width=40, command=Seleccion_Imagen)
     btn['bg'] = '#363b40'
     btn['fg'] = '#ffffff'
-    btn.grid(column=0, row=0, padx=5, pady=5)
+    btn.grid(column=0, row=0, padx=7, pady=7)
     
     raiz.mainloop()

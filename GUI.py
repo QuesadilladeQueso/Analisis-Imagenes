@@ -39,6 +39,7 @@ def Seleccion_Imagen():
         labelImagenSalida.image = ""
         seleccionado.set(0)
 
+
 #---------Ecuación Hyperbolica-----------------------------------------------------------------------------------------------------
 def acumulada(i,probas):
     sum = 0
