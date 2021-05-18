@@ -9,6 +9,7 @@ import numpy as np
 import tkinter as tk
 import random
 from matplotlib import pyplot as plt
+from scipy import ndimage
 
 
 #---------Selección de Imagen-----------------------------------------------------------------------------------------------------
@@ -35,6 +36,7 @@ def Seleccion_Imagen():
         labelImagenEntrada.configure(image=img_tk)
         labelImagenEntrada.image = img_tk
         
+        
         labelinfo1 = Label(raiz, text="Imagen de entrada", bg="#363b40", fg="#ffffff", width=30, font=("Courier", 26))
         labelinfo1.grid(column=0, row=1, padx=5, pady=5)
 
@@ -50,15 +52,14 @@ def acumulada(i,probas):
 
 def EQNYH():
    
-    image = cv2.imread(ruta, 0)
-
-    
+    image = cv2.imread(ruta, 0)    
     hist = cv2.calcHist([image], [0], None, [256], [0, 256])
     probas = []
     for i in range(len(hist)):
         probas.append(hist[i,0]/31376)
 
-    matriz_bruta = image.reshape(1,31376)
+    h, w = image.shape
+    matriz_bruta = image.reshape(1,h*w)
     matriz = matriz_bruta[0]
 
     M_matriz = []
@@ -72,11 +73,12 @@ def EQNYH():
         M_matriz.append(a)
     
     
-    nueva_matriz = np.array([M_matriz]).reshape(148,212)
+    nueva_matriz = np.array([M_matriz]).reshape(h,w)
     
     nueva_matriz = imutils.resize(nueva_matriz.astype(np.uint8), height=400)
     
     img = Image.fromarray((nueva_matriz).astype(np.uint8))
+    img.save("EQ_Hiperbolica.jpg")
     img_tk = ImageTk.PhotoImage(image=img)
     labelImagenSalida.configure(image=img_tk)
     labelImagenSalida.image = img_tk
@@ -92,12 +94,6 @@ def EST ():
     cdf = hist.cumsum() #se hace el filtro del histograma
     cdf_normalized = cdf * hist.max()/ cdf.max() #se normaliza
     
-    # plt.plot(cdf_normalized, color = 'b')
-    # plt.hist(img.flatten(),256,[0,256], color = 'r')                #Para mostrar el primer histograma
-    # plt.xlim([0,256])
-    # plt.legend(('cdf','histogram'), loc = 'upper left')
-    # plt.show()
-    
     cdf_m = np.ma.masked_equal(cdf,0)
     cdf_m = (cdf_m - cdf_m.min())*255/(cdf_m.max()-cdf_m.min())     #Aplicación del filtro
     cdf = np.ma.filled(cdf_m,0).astype('uint8')
@@ -106,29 +102,20 @@ def EST ():
     im2 = imutils.resize(img2.astype(np.uint8), height=400)
     
     img = Image.fromarray((im2).astype(np.uint8))
+    img.save("Estrechamiento.jpg")
     img_tk = ImageTk.PhotoImage(image=img)
     labelImagenSalida.configure(image=img_tk)
     labelImagenSalida.image = img_tk
 
     lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
     lblInfo3.grid(column=1, row=0, padx=5, pady=5)
-
-    
-    # img = cv2.imread('imagen3.jpg',0)                               #Lectura y creación de la nueva imagen e histograma con el filtro
-    # equ = cv2.equalizeHist(img)
-    # res = np.hstack((img,equ)) #stacking images side-by-side
-    # cv2.imwrite('res.png',res)                                      #Guardado de la nueva imagen con la comparativa entre imagenes
-    # plt.plot(cdf_normalized, color = 'b')
-    # plt.hist(res.flatten(),256,[0,256], color = 'r')
-    # plt.xlim([0,256])
-    # plt.legend(('cdf','histogram'), loc = 'upper left')
-    # plt.show()
     
 #---------Brillo/Desplazamiento----------------------------------------------------------------------------------------------------
 def Desplazamiento():
     
     image = cv2.imread(ruta, 0) 
-    matriz_bruta = image.reshape(1,31376)
+    h, w = image.shape
+    matriz_bruta = image.reshape(1,h*w)
     matriz = matriz_bruta[0]
     
     new_image = []
@@ -144,17 +131,12 @@ def Desplazamiento():
         operacion = (alpha*pixel) + beta
         new_image.append(operacion)
         
-    nueva_matriz = np.array([new_image]).reshape(148,212)
+    nueva_matriz = np.array([new_image]).reshape(h,w)
     
-    #Terminal
-    #for y in range(image.shape[0]):
-     #   for x in range(image.shape[1]):
-      #      for c in range(image.shape[2]):
-       #         new_image[y,x,c] = np.clip(alpha*image[y,x,c] + beta, 0, 255)
-
     im2 = imutils.resize(nueva_matriz.astype(np.uint8), height=400)
     
     img = Image.fromarray((im2).astype(np.uint8))
+    img.save("Desplazamiento.jpg")
     img_tk = ImageTk.PhotoImage(image=img)
     labelImagenSalida.configure(image=img_tk)
     labelImagenSalida.image = img_tk
@@ -162,23 +144,13 @@ def Desplazamiento():
     lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
     lblInfo3.grid(column=1, row=0, padx=5, pady=5)
 
-    #Muestra de imagenes
-    ##cv2.imshow('Original Image', image)
-    ##img = cv2.imread('Imagen3.jpg',0)
-    ##plt.hist(img.ravel(),256,[0,256]); plt.show()
-    #Primer imagen con histograma fin
-    ##cv2.waitKey()
-    ##cv2.imshow('New Image', new_image)
-    ##plt.hist(new_image.ravel(),256,[0,256]); plt.show()
-    # Wait until user press some key
-    ##cv2.waitKey()
-
 # #---------Contracción--------------------------------------------------------------------------------------------------------------
 
 def Contraccion():
     
     image = cv2.imread(ruta, 0) 
-    matriz_bruta = image.reshape(1,31376)
+    h, w = image.shape
+    matriz_bruta = image.reshape(1,h*w)
     matriz = matriz_bruta[0]
     
     new_image = []
@@ -194,11 +166,12 @@ def Contraccion():
         operacion = (alpha*pixel) + beta
         new_image.append(operacion)
         
-    nueva_matriz = np.array([new_image]).reshape(148,212)
+    nueva_matriz = np.array([new_image]).reshape(h,w)
     
     im2 = imutils.resize(nueva_matriz.astype(np.uint8), height=400)
     
     img = Image.fromarray((im2).astype(np.uint8))
+    img.save("Contraccion.jpg")
     img_tk = ImageTk.PhotoImage(image=img)
     labelImagenSalida.configure(image=img_tk)
     labelImagenSalida.image = img_tk
@@ -210,7 +183,8 @@ def Contraccion():
 def SalPimienta():
     
     image = cv2.imread(ruta, 0) 
-    matriz_bruta = image.reshape(1,31376)
+    h, w = image.shape
+    matriz_bruta = image.reshape(1,h*w)
     matriz = matriz_bruta[0]
     
     new_image = []
@@ -228,11 +202,12 @@ def SalPimienta():
         else:
             new_image.append(pixel)
     
-    nueva_matriz = np.array([new_image]).reshape(148,212)
+    nueva_matriz = np.array([new_image]).reshape(h,w)
     
     im2 = imutils.resize(nueva_matriz.astype(np.uint8), height=400)
     
     img = Image.fromarray((im2).astype(np.uint8))
+    img.save("Sal_Pimienta.jpg")
     img_tk = ImageTk.PhotoImage(image=img)
     labelImagenSalida.configure(image=img_tk)
     labelImagenSalida.image = img_tk
@@ -333,16 +308,43 @@ def Marr_Hildreth():
                     zero_crossing[i][j] = 255
  
     im2 = imutils.resize(zero_crossing.astype(np.uint8), height=400)
-    
     img2 = Image.fromarray((im2).astype(np.uint8))
+    img2.save("MarrHildreth.jpg")
     img_tk = ImageTk.PhotoImage(image=img2)
     labelImagenSalida.configure(image=img_tk)
-    labelImagenSalida.image = img_tk
+    labelImagenSalida.image = img_tk    
 
     lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
     lblInfo3.grid(column=1, row=0, padx=5, pady=5)
 
 
+def Robert():
+    
+    roberts_cross_v = np.array( [[ 0, 0, 0 ],
+                                [ 0, 1, 0 ],
+                                [ 0, 0,-1 ]] )
+
+    roberts_cross_h = np.array( [[ 0, 0, 0 ],
+                                [ 0, 0, 1 ],
+                                [ 0,-1, 0 ]] )
+    
+    img = cv2.imread(ruta, 0) 
+    image2 = np.asarray(img, dtype="int32")
+    
+    vertical = ndimage.convolve(image2, roberts_cross_v)
+    horizontal = ndimage.convolve(image2, roberts_cross_h)
+    
+    result = np.sqrt( np.square(horizontal) + np.square(vertical) )
+    
+    im2 = imutils.resize(result.astype(np.uint8), height=400)
+    img2 = Image.fromarray((im2).astype(np.uint8))
+    img2.save("Robert.jpg")
+    img_tk = ImageTk.PhotoImage(image=img2)
+    labelImagenSalida.configure(image=img_tk)
+    labelImagenSalida.image = img_tk    
+
+    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
 
 
 
@@ -376,14 +378,16 @@ if __name__ == '__main__':
     rad6 = Radiobutton(raiz, text='Promediador', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=6, variable=seleccionado, command=Promedio)
     rad7 = Radiobutton(raiz, text='Promedio Pesado', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=7, variable=seleccionado, command=PromedioPesado)
     rad8 = Radiobutton(raiz, text='Marr Hildreth', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=8, variable=seleccionado, command=Marr_Hildreth)
-    rad1.grid(column=0, row=4, padx = 10, pady = 10)
-    rad2.grid(column=0, row=5, padx = 10, pady = 10)
-    rad3.grid(column=0, row=6, padx = 10, pady = 10)
-    rad4.grid(column=0, row=7, padx = 10, pady = 10)
-    rad5.grid(column=0, row=8, padx = 10, pady = 10)
-    rad6.grid(column=0, row=9, padx = 10, pady = 10)
-    rad7.grid(column=0, row=10, padx = 10, pady = 10)
-    rad8.grid(column=0, row=11, padx = 10, pady = 10)
+    rad9 = Radiobutton(raiz, text='Robert', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=9, variable=seleccionado, command=Robert)
+    rad1.grid(column=0, row=4)
+    rad2.grid(column=0, row=5)
+    rad3.grid(column=0, row=6)
+    rad4.grid(column=0, row=7)
+    rad5.grid(column=0, row=8)
+    rad6.grid(column=0, row=9)
+    rad7.grid(column=0, row=10)
+    rad8.grid(column=0, row=11)
+    rad9.grid(column=0, row=12)
     
     
     btn = Button(raiz, text="Selecciona una imagen", width=40, command=Seleccion_Imagen)
