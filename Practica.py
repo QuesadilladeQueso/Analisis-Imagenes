@@ -10,6 +10,8 @@ import tkinter as tk
 import random
 from matplotlib import pyplot as plt
 from scipy import ndimage
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib.figure import Figure
 
 
 #---------Selección de Imagen-----------------------------------------------------------------------------------------------------
@@ -28,7 +30,7 @@ def Seleccion_Imagen():
         image = cv2.imread(ruta)
         image = imutils.resize(image, height=380)
         
-        muestra = imutils.resize(image, height=280)
+        muestra = imutils.resize(image, height=180)
         muestra = cv2.cvtColor(muestra, cv2.COLOR_BGR2RGB)
         
         img = Image.fromarray(muestra)
@@ -40,6 +42,17 @@ def Seleccion_Imagen():
         labelinfo1 = Label(raiz, text="Imagen de entrada", bg="#363b40", fg="#ffffff", width=30, font=("Courier", 26))
         labelinfo1.grid(column=0, row=1, padx=5, pady=5)
 
+        framegrafico = Frame(bg="#ffffff", width="50", height="50")
+        framegrafico.grid(column=0, row=3)
+        
+        eg1 = cv2.cvtColor(muestra, cv2.COLOR_BGR2GRAY)
+        h1 = cv2.calcHist([eg1],[0],None,[256],[0,255])
+        fig = plt.figure()
+        fig.add_subplot(111).plot(h1)
+        canvas = FigureCanvasTkAgg(fig, framegrafico)
+        canvas.draw()
+        canvas.get_tk_widget().grid(column=0, row=0)
+        
         labelImagenSalida.image = "" 
         seleccionado.set(0)
 
@@ -54,18 +67,23 @@ def EQNYH():
    
     image = cv2.imread(ruta, 0)    
     hist = cv2.calcHist([image], [0], None, [256], [0, 256])
+    h, w = image.shape
     probas = []
     for i in range(len(hist)):
-        probas.append(hist[i,0]/31376)
+        probas.append(hist[i,0]/h*w)
 
-    h, w = image.shape
+   
     matriz_bruta = image.reshape(1,h*w)
     matriz = matriz_bruta[0]
 
     M_matriz = []
 
-    r_max = 255
-    r_min = 20
+    r_max = max(matriz)
+    r_min = min(matriz)+1
+    
+    print(r_max)
+    print(r_min)
+    
     for i in matriz:     
         d = acumulada(i, probas)  
         operacion = (r_max/r_min) * d
@@ -159,7 +177,7 @@ def Contraccion():
     beta = 0    # Brillo 
     # Terminal
     application_window = tk.Tk()
-    alpha = simpledialog.askstring("Estrechamiento", "Ingrese cambio [0-100]", parent=application_window)
+    alpha = simpledialog.askstring("Estrechamiento", "Ingrese cambio [1-10]", parent=application_window)
     alpha = int(alpha)
     
     for pixel in matriz:
@@ -238,17 +256,21 @@ def Promedio():
     lblInfo3.grid(column=1, row=0, padx=5, pady=5)
      
 
-
 #---------Promediado pesado-----------------------------------------------------------------------------------------------------     
 def PromedioPesado():
     
-    val = random.randint(0,1)
+    #val = random.randrange(0, 10)
     im = cv2.imread(ruta, 0) 
     
-    aux = val + 8
-    a = [ [ 1.0/aux, 1.0/aux, 1.0/aux ],
-          [ 1.0/aux,  val   , 1.0/aux ],
-          [ 1.0/aux, 1.0/aux, 1.0/aux ] ]
+    #aux = val + 2
+    # a = [ [ 1.0/aux, 1.0/aux, 1.0/aux ],
+    #       [ 1.0/aux,  val   , 1.0/aux ],
+    #       [ 1.0/aux, 1.0/aux, 1.0/aux ] ]
+    
+    a = [
+        [0.05, 0.05, 0.05],
+        [0.05, 0.1, 0.05],
+        [0.05, 0.05, 0.05]]
     kernel = np.asarray(a)
     dst = cv2.filter2D(im, -1, kernel)
     cv2.imwrite ('PromedioPesado.jpg', dst)
@@ -347,7 +369,6 @@ def Robert():
     lblInfo3.grid(column=1, row=0, padx=5, pady=5)
 
 
-
 #---------Main-----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     
@@ -356,9 +377,8 @@ if __name__ == '__main__':
     
     raiz = Tk()
     
-
     raiz.title("Practica 1: Ajuste de Brillo")
-    raiz.geometry("1000x720")
+    raiz.geometry("1180x720")
     raiz['bg'] = '#7090c4' 
     
     labelImagenEntrada = Label(raiz)
@@ -367,7 +387,7 @@ if __name__ == '__main__':
     labelImagenSalida.grid(column = 1, row = 1, rowspan = 6)
     
     labelOpcion = Label(raiz, text="Elige una opción: ", bg="#363b40", fg="#ffffff",width=35, font=("Courier", 25))
-    labelOpcion.grid(column = 0, row = 3, padx = 5, pady = 5)
+    labelOpcion.grid(column = 0, row = 4, padx = 5, pady = 5)
     
     seleccionado = IntVar()
     rad1 = Radiobutton(raiz, text='Desplazamineto', bg="#7090c4", fg="#ffffff", width=35, font=("Courier", 21),value=1, variable=seleccionado, command=Desplazamiento)
@@ -379,15 +399,15 @@ if __name__ == '__main__':
     rad7 = Radiobutton(raiz, text='Promedio Pesado', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=7, variable=seleccionado, command=PromedioPesado)
     rad8 = Radiobutton(raiz, text='Marr Hildreth', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=8, variable=seleccionado, command=Marr_Hildreth)
     rad9 = Radiobutton(raiz, text='Robert', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=9, variable=seleccionado, command=Robert)
-    rad1.grid(column=0, row=4)
-    rad2.grid(column=0, row=5)
-    rad3.grid(column=0, row=6)
-    rad4.grid(column=0, row=7)
-    rad5.grid(column=0, row=8)
-    rad6.grid(column=0, row=9)
-    rad7.grid(column=0, row=10)
-    rad8.grid(column=0, row=11)
-    rad9.grid(column=0, row=12)
+    rad1.grid(column=0, row=5)
+    rad2.grid(column=0, row=6)
+    rad3.grid(column=0, row=7)
+    rad4.grid(column=0, row=8)
+    rad5.grid(column=0, row=9)
+    rad6.grid(column=0, row=10)
+    rad7.grid(column=0, row=11)
+    rad8.grid(column=0, row=12)
+    rad9.grid(column=0, row=13)
     
     
     btn = Button(raiz, text="Selecciona una imagen", width=40, command=Seleccion_Imagen)
