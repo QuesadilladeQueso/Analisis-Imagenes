@@ -37,17 +37,17 @@ def Seleccion_Imagen():
         img_tk = ImageTk.PhotoImage(image=img)
         labelImagenEntrada.configure(image=img_tk)
         labelImagenEntrada.image = img_tk
-        
-        
-        labelinfo1 = Label(raiz, text="Imagen de entrada", bg="#363b40", fg="#ffffff", width=30, font=("Courier", 26))
-        labelinfo1.grid(column=0, row=1, padx=5, pady=5)
-
-        framegrafico = Frame(bg="#ffffff", width="50", height="50")
-        framegrafico.grid(column=0, row=3)
+                    
+        labelinfo1 = Label(frame_ImagenEntrada, text="Imagen de entrada", bg="#363b40", fg="#ffffff", width=30, font=("Courier", 26))
+        labelinfo1.pack(side=TOP)
+    
+        framegrafico = Frame(frame_ImagenEntrada,bg="#ffffff", width="30", height="30")
+        framegrafico.pack()
         
         eg1 = cv2.cvtColor(muestra, cv2.COLOR_BGR2GRAY)
         h1 = cv2.calcHist([eg1],[0],None,[256],[0,255])
-        fig = plt.figure()
+        fig = plt.figure(figsize=(3,3), dpi=80)
+        
         fig.add_subplot(111).plot(h1)
         canvas = FigureCanvasTkAgg(fig, framegrafico)
         canvas.draw()
@@ -101,8 +101,8 @@ def EQNYH():
     labelImagenSalida.configure(image=img_tk)
     labelImagenSalida.image = img_tk
 
-    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
-    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
+    lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.pack()
 
 #---------Estrechamiento/Expansión-------------------------------------------------------------------------------------------------
 def EST ():
@@ -125,8 +125,8 @@ def EST ():
     labelImagenSalida.configure(image=img_tk)
     labelImagenSalida.image = img_tk
 
-    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
-    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
+    lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.pack()
     
 #---------Brillo/Desplazamiento----------------------------------------------------------------------------------------------------
 def Desplazamiento():
@@ -159,8 +159,8 @@ def Desplazamiento():
     labelImagenSalida.configure(image=img_tk)
     labelImagenSalida.image = img_tk
 
-    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
-    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
+    lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.pack()
 
 # #---------Contracción--------------------------------------------------------------------------------------------------------------
 
@@ -194,8 +194,8 @@ def Contraccion():
     labelImagenSalida.configure(image=img_tk)
     labelImagenSalida.image = img_tk
 
-    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
-    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
+    lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.pack()
         
 
 def SalPimienta():
@@ -230,8 +230,8 @@ def SalPimienta():
     labelImagenSalida.configure(image=img_tk)
     labelImagenSalida.image = img_tk
 
-    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
-    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
+    lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.pack()
 
 #---------Promediador-----------------------------------------------------------------------------------------------------        
 def Promedio():
@@ -252,8 +252,8 @@ def Promedio():
     labelImagenSalida.configure(image=img_tk)
     labelImagenSalida.image = img_tk
 
-    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
-    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
+    lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.pack()
      
 
 #---------Promediado pesado-----------------------------------------------------------------------------------------------------     
@@ -282,8 +282,8 @@ def PromedioPesado():
     labelImagenSalida.configure(image=img_tk)
     labelImagenSalida.image = img_tk
 
-    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
-    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
+    lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.pack()
 
 
 def Marr_Hildreth():
@@ -336,8 +336,8 @@ def Marr_Hildreth():
     labelImagenSalida.configure(image=img_tk)
     labelImagenSalida.image = img_tk    
 
-    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
-    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
+    lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.pack()
 
 
 def Robert():
@@ -365,8 +365,8 @@ def Robert():
     labelImagenSalida.configure(image=img_tk)
     labelImagenSalida.image = img_tk    
 
-    lblInfo3 = Label(raiz, text="IMAGEN DE SALIDA:", font="bold")
-    lblInfo3.grid(column=1, row=0, padx=5, pady=5)
+    lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.pack()
 
 
 #---------Main-----------------------------------------------------------------------------------------------------------------------
@@ -377,42 +377,56 @@ if __name__ == '__main__':
     
     raiz = Tk()
     
-    raiz.title("Practica 1: Ajuste de Brillo")
-    raiz.geometry("1180x720")
+    raiz.title("Practica 2")
+    raiz.resizable(2,2)
     raiz['bg'] = '#7090c4' 
     
-    labelImagenEntrada = Label(raiz)
-    labelImagenEntrada.grid(column = 0, row = 2)
-    labelImagenSalida = Label(raiz)
-    labelImagenSalida.grid(column = 1, row = 1, rowspan = 6)
+    frame_ImagenEntrada = Frame(raiz)
+    frame_ImagenEntrada.config( bg='#7090c4')
+    frame_ImagenEntrada.grid(column = 0, row = 0)
     
-    labelOpcion = Label(raiz, text="Elige una opción: ", bg="#363b40", fg="#ffffff",width=35, font=("Courier", 25))
-    labelOpcion.grid(column = 0, row = 4, padx = 5, pady = 5)
+    frame_Opciones = Frame(raiz)
+    frame_Opciones.config(bg='#7090c4')
+    frame_Opciones.grid(column = 1, row = 0)
+    
+    frame_ImagenSalida = Frame(raiz)
+    frame_ImagenSalida.config(bg='#7090c4')
+    frame_ImagenSalida.grid(column = 0, row=1, columnspan=2)
+    
+    
+    
+    labelImagenEntrada = Label(frame_ImagenEntrada)
+    labelImagenEntrada.pack(side=TOP)
+    labelImagenSalida = Label(frame_ImagenSalida)
+    labelImagenSalida.pack()
+    
+    labelOpcion = Label(frame_Opciones, text="Elige una opción: ", bg="#363b40", fg="#ffffff",width=35, font=("Courier", 25))
+    labelOpcion.pack()
     
     seleccionado = IntVar()
-    rad1 = Radiobutton(raiz, text='Desplazamineto', bg="#7090c4", fg="#ffffff", width=35, font=("Courier", 21),value=1, variable=seleccionado, command=Desplazamiento)
-    rad2 = Radiobutton(raiz, text='Expansión', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=2, variable=seleccionado, command=EST)
-    rad3 = Radiobutton(raiz, text='Contracción', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Contraccion)
-    rad4 = Radiobutton(raiz, text='Ecualización Logarimo Hiperbolica', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=4, variable=seleccionado, command=EQNYH)
-    rad5 = Radiobutton(raiz, text='Ruido SalPimienta', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=5, variable=seleccionado, command=SalPimienta)
-    rad6 = Radiobutton(raiz, text='Promediador', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=6, variable=seleccionado, command=Promedio)
-    rad7 = Radiobutton(raiz, text='Promedio Pesado', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=7, variable=seleccionado, command=PromedioPesado)
-    rad8 = Radiobutton(raiz, text='Marr Hildreth', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=8, variable=seleccionado, command=Marr_Hildreth)
-    rad9 = Radiobutton(raiz, text='Robert', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=9, variable=seleccionado, command=Robert)
-    rad1.grid(column=0, row=5)
-    rad2.grid(column=0, row=6)
-    rad3.grid(column=0, row=7)
-    rad4.grid(column=0, row=8)
-    rad5.grid(column=0, row=9)
-    rad6.grid(column=0, row=10)
-    rad7.grid(column=0, row=11)
-    rad8.grid(column=0, row=12)
-    rad9.grid(column=0, row=13)
+    rad1 = Radiobutton(frame_Opciones, text='Desplazamineto', bg="#7090c4", fg="#ffffff", width=35, font=("Courier", 21),value=1, variable=seleccionado, command=Desplazamiento)
+    rad2 = Radiobutton(frame_Opciones, text='Expansión', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=2, variable=seleccionado, command=EST)
+    rad3 = Radiobutton(frame_Opciones, text='Contracción', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Contraccion)
+    rad4 = Radiobutton(frame_Opciones, text='Ecualización Logarimo Hiperbolica', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=4, variable=seleccionado, command=EQNYH)
+    rad5 = Radiobutton(frame_Opciones, text='Ruido SalPimienta', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=5, variable=seleccionado, command=SalPimienta)
+    rad6 = Radiobutton(frame_Opciones, text='Promediador', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=6, variable=seleccionado, command=Promedio)
+    rad7 = Radiobutton(frame_Opciones, text='Promedio Pesado', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=7, variable=seleccionado, command=PromedioPesado)
+    rad8 = Radiobutton(frame_Opciones, text='Marr Hildreth', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=8, variable=seleccionado, command=Marr_Hildreth)
+    rad9 = Radiobutton(frame_Opciones, text='Robert', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=9, variable=seleccionado, command=Robert)
+    rad1.pack()
+    rad2.pack()
+    rad3.pack()
+    rad4.pack()
+    rad5.pack()
+    rad6.pack()
+    rad7.pack()
+    rad8.pack()
+    rad9.pack()
     
     
-    btn = Button(raiz, text="Selecciona una imagen", width=40, command=Seleccion_Imagen)
+    btn = Button(frame_ImagenEntrada, text="Selecciona una imagen", width=40, command=Seleccion_Imagen)
     btn['bg'] = '#363b40'
     btn['fg'] = '#ffffff'
-    btn.grid(column=0, row=0, padx=7, pady=7)
+    btn.pack(side=BOTTOM)
     
     raiz.mainloop()
