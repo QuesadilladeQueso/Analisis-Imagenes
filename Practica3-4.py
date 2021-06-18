@@ -373,7 +373,11 @@ def Robert():
 def Otsu():
     
     img = cv2.imread(ruta, 0) 
-    ret2,th2 = cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    threshold1 = simpledialog.askstring("Thresholding", "Ingresa un valor 1 [0-255]: ")
+    threshold1 = int(threshold1)
+    threshold2 = simpledialog.askstring("Thresholding", "Ingresa un valor 2 [0-255]: ")
+    threshold2 = int(threshold2)
+    ret2,th2 = cv2.threshold(img,threshold1,threshold2,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
     
     cv2.imwrite ('Otsu.jpg', th2)
    
@@ -393,7 +397,11 @@ def Otsu_gauss():
     img = cv2.imread(ruta, 0) 
     
     blur = cv2.GaussianBlur(img,(5,5),0)
-    ret3,th3 = cv2.threshold(blur,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    threshold1 = simpledialog.askstring("Thresholding", "Ingresa un valor 1 [0-255]: ")
+    threshold1 = int(threshold1)
+    threshold2 = simpledialog.askstring("Thresholding", "Ingresa un valor 2 [0-255]: ")
+    threshold2 = int(threshold2)
+    ret3,th3 = cv2.threshold(blur,threshold1,threshold2,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
     
     cv2.imwrite ('Otsu_gauss.jpg', th3)
    
@@ -505,23 +513,18 @@ def HitMiss():
     lblInfo3.pack()
 
 
-def Resta():
+def Op_Or():
+    
     text_img1 = simpledialog.askstring("Operación resta", "Ingresa el nombre de la imagen 1")
     text_img2 = simpledialog.askstring("Operación resta", "Ingresa el nombre de la imagen 2")
     
-    img1_original = cv2.imread(text_img1)
-    img2 = cv2.imread(text_img2)
-    dimensions2 = img2.shape
-    print(dimensions2)
-    
-    #img1 = imutils.resize(img1_original, width=img2.shape[1], height=img2.shape[0])
-    dimensions1 = img1_original.shape
-    print(dimensions1)
+    img1_original = cv2.imread(text_img1,0)   
+    img2 = cv2.imread(text_img2,0)
+
     bitwise_not = cv2.bitwise_not(img2)    
-    
     black = cv2.bitwise_or(img1_original, bitwise_not)
     
-    cv2.imwrite('Resta.jpg', black)
+    cv2.imwrite('Imagen_Or.jpg', black)
    
     im2 = imutils.resize(black.astype(np.uint8), height=400)
    
@@ -577,7 +580,7 @@ if __name__ == '__main__':
     rad6 = Radiobutton(frame_Opciones, text='Gradiente_Morfologico', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=6, variable=seleccionado, command=Gradiente_Morfologico)
     rad7 = Radiobutton(frame_Opciones, text='Hit or Miss', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=7, variable=seleccionado, command=HitMiss)
     rad8 = Radiobutton(frame_Opciones, text='Expansión', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=8, variable=seleccionado, command=EST)
-    rad9 = Radiobutton(frame_Opciones, text='Resta', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=9, variable=seleccionado, command=Resta)
+    rad9 = Radiobutton(frame_Opciones, text='Operación Or', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=9, variable=seleccionado, command=Op_Or)
     # rad7 = Radiobutton(frame_Opciones, text='Promedio Pesado', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=7, variable=seleccionado, command=PromedioPesado)
     # rad8 = Radiobutton(frame_Opciones, text='Marr Hildreth', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=8, variable=seleccionado, command=Marr_Hildreth)
     # rad9 = Radiobutton(frame_Opciones, text='Robert', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=9, variable=seleccionado, command=Robert)
