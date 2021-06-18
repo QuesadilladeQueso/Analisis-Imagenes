@@ -26,6 +26,7 @@ def Seleccion_Imagen():
     
     if len(ruta) > 0:
         global image
+        framegrafico = 0
         
         image = cv2.imread(ruta)
         image = imutils.resize(image, height=380)
@@ -371,7 +372,7 @@ def Robert():
 
 def Otsu():
     
-    im = cv2.imread(ruta, 0) 
+    img = cv2.imread(ruta, 0) 
     ret2,th2 = cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
     
     cv2.imwrite ('Otsu.jpg', th2)
@@ -386,8 +387,46 @@ def Otsu():
     lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
     lblInfo3.pack()
     
+    
+def Otsu_gauss():
+    
+    img = cv2.imread(ruta, 0) 
+    
+    blur = cv2.GaussianBlur(img,(5,5),0)
+    ret3,th3 = cv2.threshold(blur,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    
+    cv2.imwrite ('Otsu_gauss.jpg', th3)
+   
+    im2 = imutils.resize(th3.astype(np.uint8), height=400)
+   
+    img = Image.fromarray((im2).astype(np.uint8))
+    img_tk = ImageTk.PhotoImage(image=img)
+    labelImagenSalida.configure(image=img_tk)
+    labelImagenSalida.image = img_tk
 
+    lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.pack()
+    
 
+def Adaptativa():
+    
+    img = cv2.imread(ruta, 0) 
+    
+    img = cv2.medianBlur(img, 5)
+    dst2 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+    
+    cv2.imwrite ('Adaptativa.jpg', dst2)
+   
+    im2 = imutils.resize(dst2.astype(np.uint8), height=400)
+   
+    img = Image.fromarray((im2).astype(np.uint8))
+    img_tk = ImageTk.PhotoImage(image=img)
+    labelImagenSalida.configure(image=img_tk)
+    labelImagenSalida.image = img_tk
+
+    lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.pack()
+    
 
 
 #---------Main-----------------------------------------------------------------------------------------------------------------------
@@ -425,24 +464,24 @@ if __name__ == '__main__':
     labelOpcion.pack()
     
     seleccionado = IntVar()
-    rad1 = Radiobutton(frame_Opciones, text='Desplazamineto', bg="#7090c4", fg="#ffffff", width=35, font=("Courier", 21),value=1, variable=seleccionado, command=Desplazamiento)
-    rad2 = Radiobutton(frame_Opciones, text='Expansión', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=2, variable=seleccionado, command=EST)
-    rad3 = Radiobutton(frame_Opciones, text='Contracción', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Contraccion)
-    rad4 = Radiobutton(frame_Opciones, text='Ecualización Logarimo Hiperbolica', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=4, variable=seleccionado, command=EQNYH)
-    rad5 = Radiobutton(frame_Opciones, text='Ruido SalPimienta', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=5, variable=seleccionado, command=SalPimienta)
-    rad6 = Radiobutton(frame_Opciones, text='Promediador', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=6, variable=seleccionado, command=Promedio)
-    rad7 = Radiobutton(frame_Opciones, text='Promedio Pesado', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=7, variable=seleccionado, command=PromedioPesado)
-    rad8 = Radiobutton(frame_Opciones, text='Marr Hildreth', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=8, variable=seleccionado, command=Marr_Hildreth)
-    rad9 = Radiobutton(frame_Opciones, text='Robert', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=9, variable=seleccionado, command=Robert)
+    rad1 = Radiobutton(frame_Opciones, text='Otsu', bg="#7090c4", fg="#ffffff", width=35, font=("Courier", 21),value=1, variable=seleccionado, command=Otsu)
+    rad2 = Radiobutton(frame_Opciones, text='Otsu después de FGauss', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=2, variable=seleccionado, command=Otsu_gauss)
+    rad3 = Radiobutton(frame_Opciones, text='Humbralización Adapt', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Adaptativa)
+    # rad4 = Radiobutton(frame_Opciones, text='Ecualización Logarimo Hiperbolica', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=4, variable=seleccionado, command=EQNYH)
+    # rad5 = Radiobutton(frame_Opciones, text='Ruido SalPimienta', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=5, variable=seleccionado, command=SalPimienta)
+    # rad6 = Radiobutton(frame_Opciones, text='Promediador', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=6, variable=seleccionado, command=Promedio)
+    # rad7 = Radiobutton(frame_Opciones, text='Promedio Pesado', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=7, variable=seleccionado, command=PromedioPesado)
+    # rad8 = Radiobutton(frame_Opciones, text='Marr Hildreth', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=8, variable=seleccionado, command=Marr_Hildreth)
+    # rad9 = Radiobutton(frame_Opciones, text='Robert', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=9, variable=seleccionado, command=Robert)
     rad1.pack()
     rad2.pack()
     rad3.pack()
-    rad4.pack()
-    rad5.pack()
-    rad6.pack()
-    rad7.pack()
-    rad8.pack()
-    rad9.pack()
+    # rad4.pack()
+    # rad5.pack()
+    # rad6.pack()
+    # rad7.pack()
+    # rad8.pack()
+    # rad9.pack()
     
     
     btn = Button(frame_ImagenEntrada, text="Selecciona una imagen", width=40, command=Seleccion_Imagen)
