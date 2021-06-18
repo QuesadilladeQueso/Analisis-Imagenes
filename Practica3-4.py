@@ -434,7 +434,7 @@ def Erocion():
     
     erosion = cv2.erode(img,kernel,iterations = 1)
     
-    cv2.imwrite ('Adaptativa.jpg', erosion)
+    cv2.imwrite ('Erocion.jpg', erosion)
    
     im2 = imutils.resize(erosion.astype(np.uint8), height=400)
    
@@ -452,7 +452,7 @@ def Dilatacion():
     
     dilatacion = cv2.dilate(img,kernel,iterations = 1)
     
-    cv2.imwrite ('Adaptativa.jpg', dilatacion)
+    cv2.imwrite ('Dilatacion.jpg', dilatacion)
    
     im2 = imutils.resize(dilatacion.astype(np.uint8), height=400)
    
@@ -468,9 +468,9 @@ def Gradiente_Morfologico():
     kernel = np.ones((7,7),np.uint8)
     img = cv2.imread(ruta, 0) 
     
-    gradiente = cv2.morphologyEx(img, cv2.MORPH_GRADIENT, kernel
+    gradiente = cv2.morphologyEx(img, cv2.MORPH_GRADIENT, kernel)
     
-    cv2.imwrite ('Adaptativa.jpg', gradiente)
+    cv2.imwrite('Gradiente.jpg', gradiente)
    
     im2 = imutils.resize(gradiente.astype(np.uint8), height=400)
    
@@ -481,7 +481,28 @@ def Gradiente_Morfologico():
 
     lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
     lblInfo3.pack()
+
+def HitMiss():
     
+    img = cv2.imread(ruta, 0)
+    kernel = np.array((
+        [0, 1, 0],
+        [1, -1, 1],
+        [0, 1, 0]), dtype="int")
+    
+    output_image = cv2.morphologyEx(img, cv2.MORPH_HITMISS, kernel)
+    
+    cv2.imwrite('Hit-or-Miss.jpg', output_image)
+   
+    im2 = imutils.resize(output_image.astype(np.uint8), height=400)
+   
+    img = Image.fromarray((im2).astype(np.uint8))
+    img_tk = ImageTk.PhotoImage(image=img)
+    labelImagenSalida.configure(image=img_tk)
+    labelImagenSalida.image = img_tk
+
+    lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.pack()
 
 
 #---------Main-----------------------------------------------------------------------------------------------------------------------
@@ -492,7 +513,7 @@ if __name__ == '__main__':
     
     raiz = Tk()
     
-    raiz.title("Practica 2")
+    raiz.title("Practica 3 y 4")
     raiz.resizable(2,2)
     raiz['bg'] = '#7090c4' 
     
@@ -522,10 +543,10 @@ if __name__ == '__main__':
     rad1 = Radiobutton(frame_Opciones, text='Otsu', bg="#7090c4", fg="#ffffff", width=35, font=("Courier", 21),value=1, variable=seleccionado, command=Otsu)
     rad2 = Radiobutton(frame_Opciones, text='Otsu después de FGauss', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=2, variable=seleccionado, command=Otsu_gauss)
     rad3 = Radiobutton(frame_Opciones, text='Humbralización Adapt', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Adaptativa)
-    rad4 = Radiobutton(frame_Opciones, text='Erocion', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Erocion)
-    rad5 = Radiobutton(frame_Opciones, text='Dilatacion', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Dilatacion)
-    rad6 = Radiobutton(frame_Opciones, text='Gradiente_Morfologico', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Gradiente_Morfologico)
-    # rad4 = Radiobutton(frame_Opciones, text='Ecualización Logarimo Hiperbolica', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=4, variable=seleccionado, command=EQNYH)
+    rad4 = Radiobutton(frame_Opciones, text='Erocion', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=4, variable=seleccionado, command=Erocion)
+    rad5 = Radiobutton(frame_Opciones, text='Dilatacion', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=5, variable=seleccionado, command=Dilatacion)
+    rad6 = Radiobutton(frame_Opciones, text='Gradiente_Morfologico', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=6, variable=seleccionado, command=Gradiente_Morfologico)
+    rad7 = Radiobutton(frame_Opciones, text='Hit or Miss', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=7, variable=seleccionado, command=HitMiss)
     # rad5 = Radiobutton(frame_Opciones, text='Ruido SalPimienta', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=5, variable=seleccionado, command=SalPimienta)
     # rad6 = Radiobutton(frame_Opciones, text='Promediador', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=6, variable=seleccionado, command=Promedio)
     # rad7 = Radiobutton(frame_Opciones, text='Promedio Pesado', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=7, variable=seleccionado, command=PromedioPesado)
@@ -534,10 +555,10 @@ if __name__ == '__main__':
     rad1.pack()
     rad2.pack()
     rad3.pack()
-    # rad4.pack()
-    # rad5.pack()
-    # rad6.pack()
-    # rad7.pack()
+    rad4.pack()
+    rad5.pack()
+    rad6.pack()
+    rad7.pack()
     # rad8.pack()
     # rad9.pack()
     
