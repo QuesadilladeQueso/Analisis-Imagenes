@@ -427,7 +427,7 @@ def Adaptativa():
     lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
     lblInfo3.pack()
 
-def Erocion():
+def Erosion():
     kernel = np.ones((7,7),np.uint8)
 
     img = cv2.imread(ruta, 0) 
@@ -542,12 +542,12 @@ if __name__ == '__main__':
     seleccionado = IntVar()
     rad1 = Radiobutton(frame_Opciones, text='Otsu', bg="#7090c4", fg="#ffffff", width=35, font=("Courier", 21),value=1, variable=seleccionado, command=Otsu)
     rad2 = Radiobutton(frame_Opciones, text='Otsu después de FGauss', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=2, variable=seleccionado, command=Otsu_gauss)
-    rad3 = Radiobutton(frame_Opciones, text='Humbralización Adapt', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Adaptativa)
-    rad4 = Radiobutton(frame_Opciones, text='Erocion', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=4, variable=seleccionado, command=Erocion)
+    rad3 = Radiobutton(frame_Opciones, text='umbralización Adapt', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Adaptativa)
+    rad4 = Radiobutton(frame_Opciones, text='Erosion', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=4, variable=seleccionado, command=Erosion)
     rad5 = Radiobutton(frame_Opciones, text='Dilatacion', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=5, variable=seleccionado, command=Dilatacion)
     rad6 = Radiobutton(frame_Opciones, text='Gradiente_Morfologico', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=6, variable=seleccionado, command=Gradiente_Morfologico)
     rad7 = Radiobutton(frame_Opciones, text='Hit or Miss', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=7, variable=seleccionado, command=HitMiss)
-    # rad5 = Radiobutton(frame_Opciones, text='Ruido SalPimienta', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=5, variable=seleccionado, command=SalPimienta)
+    rad8 = Radiobutton(frame_Opciones, text='Expansión', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=8, variable=seleccionado, command=EST)
     # rad6 = Radiobutton(frame_Opciones, text='Promediador', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=6, variable=seleccionado, command=Promedio)
     # rad7 = Radiobutton(frame_Opciones, text='Promedio Pesado', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=7, variable=seleccionado, command=PromedioPesado)
     # rad8 = Radiobutton(frame_Opciones, text='Marr Hildreth', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=8, variable=seleccionado, command=Marr_Hildreth)
@@ -559,7 +559,7 @@ if __name__ == '__main__':
     rad5.pack()
     rad6.pack()
     rad7.pack()
-    # rad8.pack()
+    rad8.pack()
     # rad9.pack()
     
     
