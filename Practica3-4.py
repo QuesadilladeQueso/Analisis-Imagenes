@@ -505,6 +505,35 @@ def HitMiss():
     lblInfo3.pack()
 
 
+def Resta():
+    text_img1 = simpledialog.askstring("Operación resta", "Ingresa el nombre de la imagen 1")
+    text_img2 = simpledialog.askstring("Operación resta", "Ingresa el nombre de la imagen 2")
+    
+    img1_original = cv2.imread(text_img1, 0)
+    img2 = cv2.imread(text_img2,0)
+    dimensions2 = img2.shape
+    print(dimensions2)
+    
+    img1 = imutils.resize(img1_original, width=img2.shape[1], height=img2.shape[0])
+    dimensions1 = img1.shape
+    print(dimensions1)
+    bitwise_not = cv2.bitwise_not(img2)    
+    
+    black = cv2.bitwise_or(img1, bitwise_not)
+    
+    cv2.imwrite('Resta.jpg', black)
+   
+    im2 = imutils.resize(black.astype(np.uint8), height=400)
+   
+    img = Image.fromarray((im2).astype(np.uint8))
+    img_tk = ImageTk.PhotoImage(image=img)
+    labelImagenSalida.configure(image=img_tk)
+    labelImagenSalida.image = img_tk
+
+    lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.pack()
+
+
 #---------Main-----------------------------------------------------------------------------------------------------------------------
 if __name__ == '__main__':
     
@@ -548,7 +577,7 @@ if __name__ == '__main__':
     rad6 = Radiobutton(frame_Opciones, text='Gradiente_Morfologico', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=6, variable=seleccionado, command=Gradiente_Morfologico)
     rad7 = Radiobutton(frame_Opciones, text='Hit or Miss', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=7, variable=seleccionado, command=HitMiss)
     rad8 = Radiobutton(frame_Opciones, text='Expansión', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=8, variable=seleccionado, command=EST)
-    # rad6 = Radiobutton(frame_Opciones, text='Promediador', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=6, variable=seleccionado, command=Promedio)
+    rad9 = Radiobutton(frame_Opciones, text='Resta', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=9, variable=seleccionado, command=Resta)
     # rad7 = Radiobutton(frame_Opciones, text='Promedio Pesado', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=7, variable=seleccionado, command=PromedioPesado)
     # rad8 = Radiobutton(frame_Opciones, text='Marr Hildreth', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=8, variable=seleccionado, command=Marr_Hildreth)
     # rad9 = Radiobutton(frame_Opciones, text='Robert', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=9, variable=seleccionado, command=Robert)
@@ -560,7 +589,7 @@ if __name__ == '__main__':
     rad6.pack()
     rad7.pack()
     rad8.pack()
-    # rad9.pack()
+    rad9.pack()
     
     
     btn = Button(frame_ImagenEntrada, text="Selecciona una imagen", width=40, command=Seleccion_Imagen)
