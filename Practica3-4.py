@@ -509,17 +509,17 @@ def Resta():
     text_img1 = simpledialog.askstring("Operación resta", "Ingresa el nombre de la imagen 1")
     text_img2 = simpledialog.askstring("Operación resta", "Ingresa el nombre de la imagen 2")
     
-    img1_original = cv2.imread(text_img1, 0)
-    img2 = cv2.imread(text_img2,0)
+    img1_original = cv2.imread(text_img1)
+    img2 = cv2.imread(text_img2)
     dimensions2 = img2.shape
     print(dimensions2)
     
-    img1 = imutils.resize(img1_original, width=img2.shape[1], height=img2.shape[0])
-    dimensions1 = img1.shape
+    #img1 = imutils.resize(img1_original, width=img2.shape[1], height=img2.shape[0])
+    dimensions1 = img1_original.shape
     print(dimensions1)
     bitwise_not = cv2.bitwise_not(img2)    
     
-    black = cv2.bitwise_or(img1, bitwise_not)
+    black = cv2.bitwise_or(img1_original, bitwise_not)
     
     cv2.imwrite('Resta.jpg', black)
    
