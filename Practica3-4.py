@@ -426,6 +426,61 @@ def Adaptativa():
 
     lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
     lblInfo3.pack()
+
+def Erocion():
+    kernel = np.ones((7,7),np.uint8)
+
+    img = cv2.imread(ruta, 0) 
+    
+    erosion = cv2.erode(img,kernel,iterations = 1)
+    
+    cv2.imwrite ('Adaptativa.jpg', erosion)
+   
+    im2 = imutils.resize(erosion.astype(np.uint8), height=400)
+   
+    img = Image.fromarray((im2).astype(np.uint8))
+    img_tk = ImageTk.PhotoImage(image=img)
+    labelImagenSalida.configure(image=img_tk)
+    labelImagenSalida.image = img_tk
+
+    lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.pack()
+
+def Dilatacion():
+    kernel = np.ones((7,7),np.uint8)
+    img = cv2.imread(ruta, 0) 
+    
+    dilatacion = cv2.dilate(img,kernel,iterations = 1)
+    
+    cv2.imwrite ('Adaptativa.jpg', dilatacion)
+   
+    im2 = imutils.resize(dilatacion.astype(np.uint8), height=400)
+   
+    img = Image.fromarray((im2).astype(np.uint8))
+    img_tk = ImageTk.PhotoImage(image=img)
+    labelImagenSalida.configure(image=img_tk)
+    labelImagenSalida.image = img_tk
+
+    lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.pack()
+
+def Gradiente_Morfologico():
+    kernel = np.ones((7,7),np.uint8)
+    img = cv2.imread(ruta, 0) 
+    
+    gradiente = cv2.morphologyEx(img, cv2.MORPH_GRADIENT, kernel
+    
+    cv2.imwrite ('Adaptativa.jpg', gradiente)
+   
+    im2 = imutils.resize(gradiente.astype(np.uint8), height=400)
+   
+    img = Image.fromarray((im2).astype(np.uint8))
+    img_tk = ImageTk.PhotoImage(image=img)
+    labelImagenSalida.configure(image=img_tk)
+    labelImagenSalida.image = img_tk
+
+    lblInfo3 = Label(frame_ImagenSalida, text="IMAGEN DE SALIDA:", font="bold")
+    lblInfo3.pack()
     
 
 
@@ -467,6 +522,9 @@ if __name__ == '__main__':
     rad1 = Radiobutton(frame_Opciones, text='Otsu', bg="#7090c4", fg="#ffffff", width=35, font=("Courier", 21),value=1, variable=seleccionado, command=Otsu)
     rad2 = Radiobutton(frame_Opciones, text='Otsu después de FGauss', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=2, variable=seleccionado, command=Otsu_gauss)
     rad3 = Radiobutton(frame_Opciones, text='Humbralización Adapt', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Adaptativa)
+    rad4 = Radiobutton(frame_Opciones, text='Erocion', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Erocion)
+    rad5 = Radiobutton(frame_Opciones, text='Dilatacion', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Dilatacion)
+    rad6 = Radiobutton(frame_Opciones, text='Gradiente_Morfologico', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=3, variable=seleccionado, command=Gradiente_Morfologico)
     # rad4 = Radiobutton(frame_Opciones, text='Ecualización Logarimo Hiperbolica', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=4, variable=seleccionado, command=EQNYH)
     # rad5 = Radiobutton(frame_Opciones, text='Ruido SalPimienta', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=5, variable=seleccionado, command=SalPimienta)
     # rad6 = Radiobutton(frame_Opciones, text='Promediador', bg="#7090c4",fg="#ffffff", width=35, font=("Courier", 21), value=6, variable=seleccionado, command=Promedio)
