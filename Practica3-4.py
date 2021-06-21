@@ -14,6 +14,11 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 from matplotlib.figure import Figure
 
 
+
+def LimpiarSalida():
+    widget = frame_ImagenEntrada.winfo_children()[4]
+    widget.destroy()
+
 #---------Selección de Imagen-----------------------------------------------------------------------------------------------------
 def Seleccion_Imagen():
     
@@ -26,7 +31,6 @@ def Seleccion_Imagen():
     
     if len(ruta) > 0:
         global image
-        framegrafico = 0
         
         image = cv2.imread(ruta)
         image = imutils.resize(image, height=380)
@@ -599,5 +603,10 @@ if __name__ == '__main__':
     btn['bg'] = '#363b40'
     btn['fg'] = '#ffffff'
     btn.pack(side=BOTTOM)
+    
+    btn_clean = Button(frame_ImagenEntrada, text="Limpiar entrada", width=40, command=LimpiarSalida)
+    btn_clean['bg'] = '#363b40'
+    btn_clean['fg'] = '#ffffff'
+    btn_clean.pack(side=BOTTOM)
     
     raiz.mainloop()
