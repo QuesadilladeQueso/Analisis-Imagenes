@@ -497,10 +497,20 @@ def Gradiente_Morfologico():
 def HitMiss():
     
     img = cv2.imread(ruta, 0)
+    
+    kernel1 = cv2.imread('fa.bmp',0)
+    print(kernel1)
+    ret2,kernel_bin = cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    print(kernel_bin)
+    
     kernel = np.array((
-        [0, 1, 0],
-        [1, -1, 1],
-        [0, 1, 0]), dtype="int")
+        [0,0,0,1,0,0,0],
+        [0,0,1,1,1,0,0],
+        [0,1,1,1,1,1,0],
+        [0,0,1,1,1,0,0],
+        [0,0,1,1,1,0,0],
+        [0,0,1,1,1,0,0]
+    ),dtype='int')
     
     output_image = cv2.morphologyEx(img, cv2.MORPH_HITMISS, kernel)
     
